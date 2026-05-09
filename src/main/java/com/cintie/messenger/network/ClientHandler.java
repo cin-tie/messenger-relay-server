@@ -60,6 +60,7 @@ public class ClientHandler implements Runnable{
 
     public void send(String msg) throws IOException{
         writer.write(msg);
+        writer.newLine();
         writer.flush();
     }
 }
