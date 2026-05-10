@@ -3,6 +3,7 @@ package com.cintie.messenger.network;
 import java.io.*;
 import java.net.Socket;
 
+// Client thread
 public class ClientHandler implements Runnable{
     private final Socket socket;
     private final ConnectionRegistry connectionRegistry;
@@ -12,6 +13,7 @@ public class ClientHandler implements Runnable{
 
     private String peerId;
 
+    // Constructor
     public ClientHandler(Socket socket, ConnectionRegistry connectionRegistry){
         this.socket = socket;
         this.connectionRegistry = connectionRegistry;
@@ -24,12 +26,15 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    // Run thread
     @Override
     public void run() {
         try {
+            // Register new client
             this.peerId = reader.readLine();
             connectionRegistry.register(peerId, this);
 
+            // Read packets
             String line;
             while ((line = reader.readLine()) != null){
                 handlePacket(line);
@@ -41,6 +46,7 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    // Handle packet
     private void handlePacket(String raw){
         String[] parts = raw.split("\\|", 3);
 
@@ -58,6 +64,7 @@ public class ClientHandler implements Runnable{
         }
     }
 
+    // Send message
     public void send(String msg) throws IOException{
         writer.write(msg);
         writer.newLine();
