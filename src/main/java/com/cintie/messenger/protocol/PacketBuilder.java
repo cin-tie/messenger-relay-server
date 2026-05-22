@@ -35,11 +35,11 @@ public class PacketBuilder {
     }
 
     // Create hello message
-    public static Packet hello(String recipientId) {
+    public static Packet hello(String clientId) {
         return base(
                 PacketType.HELLO,
-                "Server",
-                recipientId,
+                clientId,
+                clientId,
                 null
         );
     }
