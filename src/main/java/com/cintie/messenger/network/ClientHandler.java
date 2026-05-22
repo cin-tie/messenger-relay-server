@@ -42,7 +42,7 @@ public class ClientHandler implements Runnable{
                     connectionRegistry.register(peerId, this);
 
                     // Send ACK for success registration
-                    sendPacket(PacketBuilder.ack(peerId, peerId));
+                    sendPacket(PacketBuilder.hello(peerId));
 
                     System.out.println("Client " + peerId + " registered successfully");
                 } else {
