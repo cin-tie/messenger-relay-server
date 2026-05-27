@@ -37,12 +37,17 @@ public class ClientHandler implements Runnable{
             if(line != null){
                 Packet helloPacket = PacketSerializer.deserialize(line);
 
-                if(helloPacket != null && PacketValidator.validate(helloPacket) && helloPacket.getPacketType() == PacketType.HELLO){
+                if(helloPacket != null &&
+                        PacketValidator.validate(helloPacket) &&
+                        helloPacket.getPacketType() == PacketType.HELLO  &&
+                        helloPacket.getSenderId() != null &&
+                        !helloPacket.getSenderId().isEmpty()){
+
                     this.peerId = helloPacket.getSenderId();
                     connectionRegistry.register(peerId, this);
 
                     // Send ACK for success registration
-                    sendPacket(PacketBuilder.hello(peerId));
+                    sendPacket(PacketBuilder.ack(this.peerId, this.peerId));
 
                     System.out.println("Client " + peerId + " registered successfully");
                 } else {
