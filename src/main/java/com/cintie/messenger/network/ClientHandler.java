@@ -32,33 +32,6 @@ public class ClientHandler implements Runnable{
     @Override
     public void run() {
         try {
-
-            // Peek at the first line to see if it's HTTP
-            if (!socket.isClosed() && socket.getInputStream().available() > 0) {
-                socket.setSoTimeout(100); // Short timeout for initial read
-                try {
-                    String firstLine = reader.readLine();
-                    if (firstLine != null && (firstLine.startsWith("GET ") ||
-                            firstLine.startsWith("HEAD ") ||
-                            firstLine.startsWith("POST ") ||
-                            firstLine.contains("HTTP"))) {
-                        // It's an HTTP request - send 200 OK and close
-                        String httpResponse = "HTTP/1.1 200 OK\r\n" +
-                                "Content-Type: text/plain\r\n" +
-                                "Content-Length: 2\r\n" +
-                                "Connection: close\r\n" +
-                                "\r\n" +
-                                "OK";
-                        writer.write(httpResponse);
-                        writer.flush();
-                        socket.close();
-                        return;
-                    }
-                    // Re-create reader to start fresh
-                    reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                } catch (java.net.SocketTimeoutException e) {}
-                socket.setSoTimeout(0); // Reset timeout
-            }
             // Register new client - first HELLO packet
             String line = reader.readLine();
             if(line != null){
